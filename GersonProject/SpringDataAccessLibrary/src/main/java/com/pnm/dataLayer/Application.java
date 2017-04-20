@@ -1,6 +1,7 @@
 package com.pnm.dataLayer;
 
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +14,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import com.pnm.dataLayer.entities.Category;
 import com.pnm.dataLayer.entities.Film;
 import com.pnm.dataLayer.entities.Language;
+import com.pnm.dataLayer.repositories.CategoryRepository;
 import com.pnm.dataLayer.repositories.FilmRepository;
 import com.pnm.dataLayer.repositories.LanguageRepository;
 
@@ -28,27 +31,61 @@ public class Application {
 	}
 	
 	@Bean
-	public ApplicationRunner demo(FilmRepository filmRepository, LanguageRepository languageRepository) {
+	public ApplicationRunner demo(FilmRepository filmRepository, LanguageRepository languageRepository, CategoryRepository categoryRepository) {
 		return (args) -> {
 			
 			log.info("Hello!");
 			
-			Long idLn = 2L;
+			Long id = 1000L;
 			
-			Language ln = languageRepository.findOne(idLn);
-			log.info("Film found with language: "+ln.getName());
+//			Language ln = languageRepository.findOne(id);
+//			log.info("Film found with language: "+ln.getName());
+//			log.info("--------------------------------");
+//
+//			List<Film> filmList = filmRepository.findByLanguage(ln);
+			
+//			Category cat = categoryRepository.findOne(id);
+//			log.info("Film found with category: "+cat.getName());
+//			log.info("--------------------------------");
+//
+//			List<Film> filmList = filmRepository.findByCategories(cat);
+//
+//			log.info("Elenco: "+filmList.size());
+//			for (Film film : filmList) {
+//				log.info(film.toString());
+//				
+//				List<Category> categoryList = categoryRepository.findByFilms(film);
+//				for (Category category : categoryList) {
+//					log.info("Categorie: "+category.getName());
+//				}
+//				
+//				Language language = languageRepository.findByFilmLanguage(film);
+//				log.info("Lingua: "+language.getName());
+//				
+//				Language languageOrigin = languageRepository.findByFilmLanguage(film);
+//				log.info("Lingua Originale: "+languageOrigin.getName());
+//			}
+			
+			Film film = filmRepository.findOne(id);
+			log.info("Film: "+film.getTitle());
 			log.info("--------------------------------");
 
-			List<Film> filmList = filmRepository.findByLanguage(ln);
-
-			log.info("Elenco: "+filmList.size());
-			for (Film film : filmList) {
-				Language language = film.getLanguage();
-				
-				language.getFilm();
-				
-				log.info(film.toString());
-			}		
+			Language language = languageRepository.findByFilmLanguage(film);
+			log.info("Lingua: "+language.getName());
+			
+			Language languageOrigin = languageRepository.findByFilmOriginalLanguage(film);
+			if(languageOrigin!=null){
+				log.info("Lingua Originale: "+languageOrigin.getName());
+			}else{
+				log.info("Lingua Originale: non presente");
+			}
+			
+			List<Category> categoryList = categoryRepository.findByFilms(film);
+			
+			log.info("Elenco: "+categoryList.size());
+			for (Category category : categoryList) {
+				log.info("Categorie: "+category.getName());
+			}
 
 		};
 		

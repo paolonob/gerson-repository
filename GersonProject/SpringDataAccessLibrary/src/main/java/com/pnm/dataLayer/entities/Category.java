@@ -9,20 +9,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="language")
-public class Language {
-	
-	public Language() {}
+@Table(name="category")
+public class Category {
+		
+	public Category() {}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="language_id",unique=true,nullable=false)
+	@Column(name="category_id",unique=true,nullable=false)
 	private Long id;
 	
 	@Column(nullable=false)
@@ -31,12 +33,9 @@ public class Language {
 	@Column(name="last_update",nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdate;
-
-	@OneToMany(mappedBy = "language")
-    private Set<Film> filmLanguage = new HashSet<Film>();
 	
-	@OneToMany(mappedBy = "originalLanguage")
-    private Set<Film> filmOriginalLanguage = new HashSet<Film>();
+	@ManyToMany(mappedBy = "categories")
+	private Set<Film> films = new HashSet<Film>(0);
 	
 	
 	// Metodi Getter e Setter
@@ -65,20 +64,12 @@ public class Language {
 		this.lastUpdate = lastUpdate;
 	}
 
-	public Set<Film> getFilmLanguage() {
-		return filmLanguage;
+	public Set<Film> getFilms() {
+		return films;
 	}
 
-	public void setFilmLanguage(Set<Film> filmLanguage) {
-		this.filmLanguage = filmLanguage;
+	public void setFilms(Set<Film> films) {
+		this.films = films;
 	}
-
-	public Set<Film> getFilmOriginalLanguage() {
-		return filmOriginalLanguage;
-	}
-
-	public void setFilmOriginalLanguage(Set<Film> filmOriginalLanguage) {
-		this.filmOriginalLanguage = filmOriginalLanguage;
-	}
-
+	
 }
