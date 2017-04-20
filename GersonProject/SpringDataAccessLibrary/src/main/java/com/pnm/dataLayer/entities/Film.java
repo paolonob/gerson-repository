@@ -2,6 +2,8 @@ package com.pnm.dataLayer.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -14,54 +16,54 @@ public class Film {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="film_id")
+	@Column(name="film_id",unique=true,nullable=false)
 	private Long id;
 	
-	@Column
+	@Column(nullable=false)
 	private String title;
 	
 	@Column
 	private String description;
 	
-//	@Column
-//	private Long language_id;
-	
-	@Column
-	private Long release_year;
+	@Column(name="release_year")
+	private Long releaseYear;
 
-	@Column
-	private Long original_language_id;
+	@Column(name="rental_duration",nullable=false)
+	private Long rentalDuration;
 
-	@Column
-	private Long rental_duration;
-
-	@Column
-	private BigDecimal rental_rate;
+	@Column(name="rental_rate",nullable=false)
+	private BigDecimal rentalRate;
 	
 	@Column
 	private Long length;
 
-	@Column
-	private BigDecimal replacement_cost;
+	@Column(name="replacement_cost",nullable=false)
+	private BigDecimal replacementCost;
 
 	@Column
 	private String rating;
 	
-	@Column
-	private String special_features;
+	@Column(name="special_features")
+	private String specialFeatures;
 	
-	@Column
+	@Column(name="last_update",nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date last_update;
+	private Date lastUpdate;
 	
 	@ManyToOne
-    @JoinColumn(name="language_id")
+    @JoinColumn(name="language_id",nullable=false)
     private Language language;
 	
-//	@ManyToOne
-//    @JoinColumn(name="original_language_id")
-//    private Language language;
+	@ManyToOne
+    @JoinColumn(name="original_language_id")
+    private Language originalLanguage;
  
+	@ManyToMany
+	@JoinTable(name = "film_category", catalog = "sakila", joinColumns = {
+			@JoinColumn(name = "FILM_ID", nullable = false, updatable = false) },
+			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", nullable = false, updatable = false) })
+	private Set<Category> categories = new HashSet<Category>(0);
+	
 	
 	// Metodi Getter e Setter
 
@@ -89,36 +91,28 @@ public class Film {
 		this.description = description;
 	}
 
-	public Long getRelease_year() {
-		return release_year;
+	public Long getReleaseYear() {
+		return releaseYear;
 	}
 
-	public void setRelease_year(Long release_year) {
-		this.release_year = release_year;
+	public void setReleaseYear(Long releaseYear) {
+		this.releaseYear = releaseYear;
 	}
 
-	public Long getOriginal_language_id() {
-		return original_language_id;
+	public Long getRentalDuration() {
+		return rentalDuration;
 	}
 
-	public void setOriginal_language_id(Long original_language_id) {
-		this.original_language_id = original_language_id;
+	public void setRentalDuration(Long rentalDuration) {
+		this.rentalDuration = rentalDuration;
 	}
 
-	public Long getRental_duration() {
-		return rental_duration;
+	public BigDecimal getRentalRate() {
+		return rentalRate;
 	}
 
-	public void setRental_duration(Long rental_duration) {
-		this.rental_duration = rental_duration;
-	}
-
-	public BigDecimal getRental_rate() {
-		return rental_rate;
-	}
-
-	public void setRental_rate(BigDecimal rental_rate) {
-		this.rental_rate = rental_rate;
+	public void setRentalRate(BigDecimal rentalRate) {
+		this.rentalRate = rentalRate;
 	}
 
 	public Long getLength() {
@@ -129,12 +123,12 @@ public class Film {
 		this.length = length;
 	}
 
-	public BigDecimal getReplacement_cost() {
-		return replacement_cost;
+	public BigDecimal getReplacementCost() {
+		return replacementCost;
 	}
 
-	public void setReplacement_cost(BigDecimal replacement_cost) {
-		this.replacement_cost = replacement_cost;
+	public void setReplacementCost(BigDecimal replacementCost) {
+		this.replacementCost = replacementCost;
 	}
 
 	public String getRating() {
@@ -145,20 +139,20 @@ public class Film {
 		this.rating = rating;
 	}
 
-	public String getSpecial_features() {
-		return special_features;
+	public String getSpecialFeatures() {
+		return specialFeatures;
 	}
 
-	public void setSpecial_features(String special_features) {
-		this.special_features = special_features;
+	public void setSpecialFeatures(String specialFeatures) {
+		this.specialFeatures = specialFeatures;
 	}
 
-	public Date getLast_update() {
-		return last_update;
+	public Date getLastUpdate() {
+		return lastUpdate;
 	}
 
-	public void setLast_update(Date last_update) {
-		this.last_update = last_update;
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 
 	public Language getLanguage() {
@@ -167,6 +161,22 @@ public class Film {
 
 	public void setLanguage(Language language) {
 		this.language = language;
+	}
+
+	public Language getOriginalLanguage() {
+		return originalLanguage;
+	}
+
+	public void setOriginalLanguage(Language originalLanguage) {
+		this.originalLanguage = originalLanguage;
+	}
+
+	public Set<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Set<Category> categories) {
+		this.categories = categories;
 	}
 
 	@Override
