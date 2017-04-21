@@ -17,5 +17,10 @@ public interface FilmRepository extends CrudRepository<Film, Long>{
 	List<Film> findByOriginalLanguage(Language language);
 	
 	List<Film> findByCategories(Category category);
+	
+	List<Film> findByReleaseYear(Long year);
+	
+	List<Film> findByCategoriesAndReleaseYear(Category category, Long year);
+	
 
 }
