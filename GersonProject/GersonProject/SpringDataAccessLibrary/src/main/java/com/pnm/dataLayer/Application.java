@@ -1,10 +1,12 @@
 package com.pnm.dataLayer;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -30,13 +32,62 @@ public class Application {
 		SpringApplication.run(Application.class);
 	}
 	
+	@Autowired
+	public FilmRepository iFilm;
+	
+	@Autowired
+	public CategoryRepository iCategory;
+	
+	
+	public List<Film> findFilmByCategoryAndYear(String category, Long year){
+		
+		Category cat = (Category) iCategory.findByName(category);
+		
+		List<Film> films = null;
+		if(year==0){
+			films = iFilm.findByCategories(cat);
+		}else{
+			films = iFilm.findByCategoriesAndReleaseYear(cat, year);
+		}
+		
+		return films;
+	};
+	
 	@Bean
 	public ApplicationRunner demo(FilmRepository filmRepository, LanguageRepository languageRepository, CategoryRepository categoryRepository) {
 		return (args) -> {
 			
 			log.info("Hello!");
 			
-			Long id = 1000L;
+			String categoria = "Action";
+			Long anno = 0L;
+			List<Film> films = findFilmByCategoryAndYear(categoria, anno);
+			
+			if(films!=null){				
+			
+				log.info("Elenco Film di categoria "+categoria+" : "+films.size());
+				for (Film film : films) {
+					log.info("Titolo: "+film.getTitle());
+					log.info("     Anno: "+film.getReleaseYear());
+					
+					
+					for (Category cats : film.getCategories()) {
+						log.info("     Categorie: "+cats.getName());
+					}
+					
+					log.info("     Lingua: "+film.getLanguage().getName());
+					
+					if(film.getOriginalLanguage()!=null){
+						log.info("     Lingua Originale: "+film.getOriginalLanguage().getName());
+					}else{
+						log.info("     Lingua Originale: non presente");
+					}
+					
+				}		
+				
+			}
+			
+//			Long id = 1000L;
 			
 //			Language ln = languageRepository.findOne(id);
 //			log.info("Film found with language: "+ln.getName());
@@ -66,26 +117,31 @@ public class Application {
 //				log.info("Lingua Originale: "+languageOrigin.getName());
 //			}
 			
-			Film film = filmRepository.findOne(id);
-			log.info("Film: "+film.getTitle());
-			log.info("--------------------------------");
-
-			Language language = languageRepository.findByFilmLanguage(film);
-			log.info("Lingua: "+language.getName());
+//			Film film = filmRepository.findOne(id);
+//			
+//			List<Category> listCat = (List<Category>) new HashSet<Category>(0);
 			
-			Language languageOrigin = languageRepository.findByFilmOriginalLanguage(film);
-			if(languageOrigin!=null){
-				log.info("Lingua Originale: "+languageOrigin.getName());
-			}else{
-				log.info("Lingua Originale: non presente");
-			}
+			//listCat = film.getCategories();
 			
-			List<Category> categoryList = categoryRepository.findByFilms(film);
-			
-			log.info("Elenco: "+categoryList.size());
-			for (Category category : categoryList) {
-				log.info("Categorie: "+category.getName());
-			}
+//			log.info("Film: "+film.getTitle());
+//			log.info("--------------------------------");
+//
+//			Language language = languageRepository.findByFilmLanguage(film);
+//			log.info("Lingua: "+language.getName());
+//			
+//			Language languageOrigin = languageRepository.findByFilmOriginalLanguage(film);
+//			if(languageOrigin!=null){
+//				log.info("Lingua Originale: "+languageOrigin.getName());
+//			}else{
+//				log.info("Lingua Originale: non presente");
+//			}
+//			
+//			List<Category> categoryList = categoryRepository.findByFilms(film);
+//			
+//			log.info("Elenco: "+categoryList.size());
+//			for (Category category : categoryList) {
+//				log.info("Categorie: "+category.getName());
+//			}
 
 		};
 		

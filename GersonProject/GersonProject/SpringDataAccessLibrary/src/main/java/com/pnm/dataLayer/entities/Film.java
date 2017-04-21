@@ -31,13 +31,13 @@ public class Film {
 	@Column(name="rental_duration",nullable=false)
 	private Long rentalDuration;
 
-	@Column(name="rental_rate",nullable=false)
+	@Column(name="rental_rate",nullable=false, precision=4, scale=2)
 	private BigDecimal rentalRate;
 	
 	@Column
 	private Long length;
 
-	@Column(name="replacement_cost",nullable=false)
+	@Column(name="replacement_cost",nullable=false, precision=5, scale=2)
 	private BigDecimal replacementCost;
 
 	@Column
@@ -58,7 +58,7 @@ public class Film {
     @JoinColumn(name="original_language_id")
     private Language originalLanguage;
  
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "film_category", catalog = "sakila", joinColumns = {
 			@JoinColumn(name = "FILM_ID", nullable = false, updatable = false) },
 			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", nullable = false, updatable = false) })

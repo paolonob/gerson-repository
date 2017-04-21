@@ -8,8 +8,9 @@ import com.pnm.dataLayer.entities.Film;
 
 public interface CategoryRepository extends CrudRepository<Category, Long>{
 	
-	List<Category> findByName(String name);
+	public Category findByName(String name);
 	
-	List<Category> findByFilms(Film film);
+	public List<Category> findByFilms(Film film);
+
 
 }
