@@ -8,6 +8,7 @@
   <packaging>pom</packaging>
   <modules>
   	<module>SpringDataAccessLibrary</module>
+  	<module>BusinessLogicLibrary</module>
   </modules>
   
   	<properties>

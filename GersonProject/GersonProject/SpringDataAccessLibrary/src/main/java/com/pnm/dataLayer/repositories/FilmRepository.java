@@ -12,6 +12,8 @@ public interface FilmRepository extends CrudRepository<Film, Long>{
 	
 	List<Film> findByTitle(String title);
 	
+	List<Film> findByTitleLike(String title);
+	
 	List<Film> findByLanguage(Language language);
 	
 	List<Film> findByOriginalLanguage(Language language);
