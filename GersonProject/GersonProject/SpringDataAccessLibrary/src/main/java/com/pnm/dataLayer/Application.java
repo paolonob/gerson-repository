@@ -59,17 +59,19 @@ public class Application {
 			
 			log.info("Hello!");
 			
-			String categoria = "Action";
-			Long anno = 0L;
-			List<Film> films = findFilmByCategoryAndYear(categoria, anno);
+//			String categoria = "Action";
+//			Long anno = 2017L;
+//			List<Film> films = findFilmByCategoryAndYear(categoria, anno);
+			
+			List<Film> films = filmRepository.findByTitleLike("%ACADEMY%");
 			
 			if(films!=null){				
 			
-				log.info("Elenco Film di categoria "+categoria+" : "+films.size());
+				//log.info("Elenco Film di categoria "+categoria+" : "+films.size());
+				log.info("Elenco Film : "+films.size());
 				for (Film film : films) {
 					log.info("Titolo: "+film.getTitle());
 					log.info("     Anno: "+film.getReleaseYear());
-					
 					
 					for (Category cats : film.getCategories()) {
 						log.info("     Categorie: "+cats.getName());
@@ -85,6 +87,8 @@ public class Application {
 					
 				}		
 				
+			}else{
+				log.info("Nessun film trovato.");
 			}
 			
 //			Long id = 1000L;
