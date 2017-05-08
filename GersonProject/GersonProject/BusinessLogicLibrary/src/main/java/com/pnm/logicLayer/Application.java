@@ -1,6 +1,17 @@
 package com.pnm.logicLayer;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +26,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.pnm.dataLayer.entities.Category;
 import com.pnm.dataLayer.entities.Film;
+import com.pnm.dataLayer.entities.Language;
 import com.pnm.dataLayer.repositories.CategoryRepository;
 import com.pnm.dataLayer.repositories.FilmRepository;
 import com.pnm.dataLayer.repositories.LanguageRepository;
+import com.pnm.logicLayer.components.services.FilmManager;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.pnm.dataLayer.repositories"})
+//@ComponentScan(basePackages = {"com.pnm.dataLayer.entities"})
 @EntityScan("com.pnm.dataLayer.entities")
 @EnableJpaRepositories("com.pnm.dataLayer")
 public class Application {
@@ -31,11 +44,23 @@ public class Application {
 		SpringApplication.run(Application.class);
 	}
 	
+//	@Autowired
+//	public Film film;
+//	
+//	@Autowired
+//	public Category category;
+//	
+//	@Autowired
+//	public Language language;
+	
 	@Autowired
 	public FilmRepository iFilm;
 	
 	@Autowired
 	public CategoryRepository iCategory;
+	
+	@Autowired
+	public FilmManager filmManager;
 	
 	
 	public List<Film> findFilmByCategoryAndYear(String category, Long year){
@@ -58,40 +83,76 @@ public class Application {
 			
 			log.info("Hello!");
 			
-//			String categoria = "Action";
-//			Long anno = 2017L;
-//			List<Film> films = findFilmByCategoryAndYear(categoria, anno);
+//			Film film = new Film();
+//			film.setTitle("NUOVO FILM COMPLETO");
+//			film.setDescription("Un nuovo film completo di tutti i campi");
+//			film.setReleaseYear(2017L);
+//			
+//			List<Language> listLanguage = (List<Language>) languageRepository.findAll();
+//			film.setLanguage(listLanguage.get(1));
+//			film.setOriginalLanguage(listLanguage.get(0));
+//			
+//			film.setRentalDuration(3L);
+//			
+//			BigDecimal rentalRate = new BigDecimal("5");
+//			film.setRentalRate(rentalRate);
+//			
+//			film.setLength(600L);
+//			
+//			BigDecimal rep = new BigDecimal("20");
+//			film.setReplacementCost(rep);
+//			
+//			film.setRating("G");
+//			
+//			film.setSpecialFeatures("Trailers,Behind the Scenes");			
+//			
+//			Date lastUpdate = new Date();
+//			film.setLastUpdate(lastUpdate);
+//			
+//			HashSet<Category> listCat = new HashSet<Category>();
+//			Category cat = categoryRepository.findByName("Action");
+//			listCat.add(cat);
+//			film.setCategories(listCat);
+//			
+//			filmManager.aggiungiFilm(film);
+//			log.info("Aggiunto Film : "+film.getTitle());
 			
-			List<Film> films = filmRepository.findByTitleLike("%ACADEMY%");
-			
-			if(films!=null){				
-			
-				//log.info("Elenco Film di categoria "+categoria+" : "+films.size());
-				log.info("Elenco Film : "+films.size());
-				for (Film film : films) {
-					log.info("Titolo: "+film.getTitle());
-					log.info("     Anno: "+film.getReleaseYear());
-					
-					for (Category cats : film.getCategories()) {
-						log.info("     Categorie: "+cats.getName());
-					}
-					
-					log.info("     Lingua: "+film.getLanguage().getName());
-					
-					if(film.getOriginalLanguage()!=null){
-						log.info("     Lingua Originale: "+film.getOriginalLanguage().getName());
-					}else{
-						log.info("     Lingua Originale: non presente");
-					}
-					
-				}		
+			String fileName = "C:\\Users\\ITAdmin\\Documents\\file.csv";
+			//C:\Users\ITAdmin\Documents
+			log.info("Stampo file: "+fileName);
+
+			List<String> list = new ArrayList<>();
+
+			try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
+
+				//stream.forEach(System.out::println);
 				
-			}else{
-				log.info("Nessun film trovato.");
+				//1. filter line 3
+				//2. convert all content to upper case
+				//3. convert it into a List
+				list = stream
+						.filter(line -> !line.startsWith("film_id"))
+						.map(String::toUpperCase)
+						.collect(Collectors.toList());
+
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 
+			log.info("List di "+list.size()+" elementi:");
+			
+			list.forEach(System.out::println);
+			
+			log.info("Fine file");
+			
+			String record = list.get(0);
+			String[] split = record.split(",");
+			Film film = new Film();
+			film.setTitle(split[1]);
+			
+			log.info("Title :"+film.getTitle());
+
 		};
-		
 		
 	}
 	

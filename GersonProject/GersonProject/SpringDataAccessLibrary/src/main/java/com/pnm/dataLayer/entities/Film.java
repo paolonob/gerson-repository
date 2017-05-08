@@ -28,16 +28,16 @@ public class Film {
 	@Column(name="release_year")
 	private Long releaseYear;
 
-	@Column(name="rental_duration",nullable=false)
+	@Column(name="rental_duration")
 	private Long rentalDuration;
 
-	@Column(name="rental_rate",nullable=false, precision=4, scale=2)
+	@Column(name="rental_rate", precision=4, scale=2)
 	private BigDecimal rentalRate;
 	
 	@Column
 	private Long length;
 
-	@Column(name="replacement_cost",nullable=false, precision=5, scale=2)
+	@Column(name="replacement_cost", precision=5, scale=2)
 	private BigDecimal replacementCost;
 
 	@Column
