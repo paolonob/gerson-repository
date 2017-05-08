@@ -1,0 +1,3 @@
+com\pnm\logicLayer\Application.class
+com\pnm\logicLayer\components\services\FilmManager.class
+com\pnm\logicLayer\SpringConfiguration.class

@@ -1,3 +1,7 @@
+com\pnm\dataLayer\entities\Language.class
+com\pnm\dataLayer\repositories\CategoryRepository.class
 com\pnm\dataLayer\entities\Film.class
+com\pnm\dataLayer\repositories\LanguageRepository.class
 com\pnm\dataLayer\repositories\FilmRepository.class
 com\pnm\dataLayer\Application.class
+com\pnm\dataLayer\entities\Category.class
